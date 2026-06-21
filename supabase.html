@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full bg-slate-900 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Đọc Sách & Quản trị Tài khoản</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind Config để tùy chỉnh giao diện -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col overflow-hidden">
+
+    <!-- THÔNG BÁO TOAST (Thay thế alert) -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- MÀN HÌNH CHỜ LOAD -->
+    <div id="loading-screen" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center z-50 transition-opacity duration-300">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-brand-500 border-t-transparent"></div>
+        <p class="mt-4 text-slate-400 text-sm">Đang tải ứng dụng...</p>
+    </div>
+
+    <!-- 1. MÀN HÌNH CẤU HÌNH SUPABASE (Hiển thị nếu chưa điền thông tin Supabase) -->
+    <div id="setup-screen" class="hidden min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 bg-slate-800 p-8 rounded-2xl shadow-2xl border border-slate-700">
+            <div class="text-center">
+                <div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-brand-900 text-brand-500 text-2xl mb-4">
+                    <i class="fa-solid fa-gears"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold text-white">Kết nối Supabase</h2>
+                <p class="mt-2 text-sm text-slate-400">Vui lòng nhập thông tin cấu hình từ dự án Supabase của bạn</p>
+            </div>
+            <form id="setup-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Supabase Project URL</label>
+                    <input id="setup-url" type="url" required placeholder="https://xxxx.supabase.co" 
+                        class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-transparent text-white placeholder-slate-500 outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Supabase Anon Key</label>
+                    <input id="setup-key" type="password" required placeholder="eyJhbGciOi..." 
+                        class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-transparent text-white placeholder-slate-500 outline-none transition">
+                </div>
+                <button type="submit" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-500 text-white font-medium rounded-xl transition duration-150 ease-in-out shadow-lg shadow-brand-500/20">
+                    Lưu & Khởi chạy ứng dụng
+                </button>
+            </form>
+            <div class="text-xs text-slate-500 space-y-1 bg-slate-900 p-3 rounded-lg border border-slate-800">
+                <p class="font-semibold text-slate-400">💡 Cách lấy thông tin này:</p>
+                <p>1. Đăng nhập vào <a href="https://supabase.com" target="_blank" class="text-brand-500 hover:underline">supabase.com</a></p>
+                <p>2. Chọn Project của bạn -> Vào <strong>Project Settings</strong> -> Chọn <strong>API</strong></p>
+                <p>3. Copy <strong>Project URL</strong> và <strong>anon / public Key</strong> dán vào đây.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MÀN HÌNH ĐĂNG NHẬP -->
+    <div id="login-screen" class="hidden min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 bg-slate-800 p-8 rounded-2xl shadow-2xl border border-slate-700 relative">
+            <button onclick="openConfig()" class="absolute top-4 right-4 text-slate-500 hover:text-white transition" title="Cấu hình hệ thống">
+                <i class="fa-solid fa-cog text-lg"></i>
+            </button>
+            <div class="text-center">
+                <div class="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-brand-900 text-brand-500 text-3xl mb-4">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold text-white">Chào mừng quay trở lại</h2>
+                <p class="mt-2 text-sm text-slate-400">Đăng nhập tài khoản được cấp để tiếp tục học tập</p>
+            </div>
+            <form id="login-form" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Tên tài khoản (Username)</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input id="login-username" type="text" required placeholder="Nhập tên đăng nhập..." 
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-transparent text-white placeholder-slate-500 outline-none transition">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mật khẩu</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input id="login-password" type="password" required placeholder="Nhập mật khẩu..." 
+                            class="w-full pl-10 pr-10 py-2.5 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-transparent text-white placeholder-slate-500 outline-none transition">
+                        <button type="button" onclick="togglePasswordVisibility('login-password', this)" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-300">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-500 text-white font-medium rounded-xl transition duration-150 ease-in-out shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2">
+                    <span>Đăng nhập hệ thống</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. GIAO DIỆN CHÍNH (Sau khi đăng nhập) -->
+    <div id="app-screen" class="hidden h-full flex flex-col">
+        <!-- THANH HEADER ĐIỀU HƯỚNG TỐI GIẢN -->
+        <header class="bg-slate-800 border-b border-slate-700 px-6 py-3 flex items-center justify-between shadow-md">
+            <div class="flex items-center gap-3">
+                <div class="h-9 w-9 flex items-center justify-center rounded-lg bg-brand-900 text-brand-500">
+                    <i class="fa-solid fa-book-reader"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-white leading-tight">Thư Viện Tài Liệu Học Tập</h1>
+                    <p class="text-xs text-slate-400" id="user-badge">Đang kết nối...</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <!-- Nút chuyển hướng nhanh chỉ hiển thị cho Admin -->
+                <button id="admin-panel-btn" onclick="switchMainView('admin')" class="hidden px-4 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-medium rounded-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Trang Quản Trị</span>
+                </button>
+
+                <button id="reader-view-btn" onclick="switchMainView('reader')" class="hidden px-4 py-1.5 bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium rounded-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Xem Sách</span>
+                </button>
+
+                <button onclick="handleLogout()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm font-medium rounded-lg transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span class="hidden sm:inline">Đăng xuất</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- KHU VỰC CHỨA NỘI DUNG CHÍNH (Đọc sách hoặc Admin Panel) -->
+        <main class="flex-1 relative overflow-hidden bg-slate-950">
+            
+            <!-- VIEW ĐỌC SÁCH (IFRAME FLIPHTML5) -->
+            <div id="reader-view" class="absolute inset-0 h-full w-full">
+                <!-- Iframe chứa tài liệu FlipHTML5 -->
+                <iframe 
+                    id="book-iframe"
+                    src="https://online.fliphtml5.com/thaidehoc/6A70E892-05D6-49A9-96C2-2E863FC52829/" 
+                    class="w-full h-full border-0" 
+                    allowfullscreen="true" 
+                    allow="clipboard-write">
+                </iframe>
+            </div>
+
+            <!-- VIEW TRANG QUẢN TRỊ (ADMIN) -->
+            <div id="admin-view" class="absolute inset-0 overflow-y-auto p-6 hidden">
+                <div class="max-w-6xl mx-auto space-y-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-user-gear text-amber-500"></i>
+                                Quản Lý Tài Khoản Người Dùng
+                            </h2>
+                            <p class="text-slate-400 text-sm">Cấp phát, quản lý thông tin tài khoản không sợ trùng lặp.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Cột Trái: Form Thêm Mới Tài Khoản -->
+                        <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 h-fit space-y-4 shadow-lg">
+                            <h3 class="text-lg font-semibold text-white border-b border-slate-700 pb-2">
+                                <i class="fa-solid fa-user-plus text-brand-500 mr-2"></i>Cấp tài khoản mới
+                            </h3>
+                            <form id="create-user-form" class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Tên tài khoản (Tối thiểu 3 kí tự)</label>
+                                    <input id="create-username" type="text" required placeholder="Ví dụ: thaidehoc_01" 
+                                        class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-transparent text-white placeholder-slate-500 outline-none transition text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mật khẩu đăng nhập</label>
+                                    <div class="relative">
+                                        <input id="create-password" type="password" required placeholder="Mật khẩu tối thiểu 6 kí tự..." 
+                                            class="w-full pl-4 pr-10 py-2 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-transparent text-white placeholder-slate-500 outline-none transition text-sm">
+                                        <button type="button" onclick="togglePasswordVisibility('create-password', this)" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-500 hover:text-slate-300">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Vai trò thành viên</label>
+                                    <select id="create-role" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-transparent text-white outline-none transition text-sm">
+                                        <option value="user">Người dùng (Chỉ được xem tài liệu)</option>
+                                        <option value="admin">Quản trị viên (Xem tài liệu & Quản lý tài khoản)</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-500 text-white font-medium rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-brand-500/15">
+                                    <i class="fa-solid fa-save"></i>
+                                    <span>Tạo & Lưu tài khoản</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Cột Phải: Danh Sách Tài Khoản -->
+                        <div class="lg:col-span-2 bg-slate-800 rounded-2xl border border-slate-700 shadow-lg overflow-hidden flex flex-col">
+                            <div class="p-5 border-b border-slate-700 flex items-center justify-between bg-slate-800/50">
+                                <h3 class="text-lg font-semibold text-white">
+                                    <i class="fa-solid fa-users text-slate-400 mr-2"></i>Danh sách thành viên
+                                </h3>
+                                <span class="bg-slate-900 text-slate-300 px-3 py-1 rounded-full text-xs font-semibold border border-slate-700" id="user-count-badge">0 tài khoản</span>
+                            </div>
+                            
+                            <!-- BẢNG DANH SÁCH -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-sm text-slate-300">
+                                    <thead class="text-xs uppercase tracking-wider bg-slate-900/50 text-slate-400 border-b border-slate-700">
+                                        <tr>
+                                            <th class="px-6 py-4">Tên đăng nhập</th>
+                                            <th class="px-6 py-4">Vai trò</th>
+                                            <th class="px-6 py-4">Ngày cấp</th>
+                                            <th class="px-6 py-4 text-center">Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="user-list-body" class="divide-y divide-slate-700/50">
+                                        <!-- Code JS tự động render dữ liệu người dùng ở đây -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- SCRIPT ĐIỀU KHIỂN CHÍNH -->
+    <script>
+        // --- 1. BIẾN TOÀN CỤC & TRẠNG THÁI ---
+        let supabaseClient = null; // Đổi tên để tránh xung đột với thư viện toàn cục 'supabase' từ CDN
+        let currentUser = null;
+        let usersData = [];
+
+        // --- 2. QUẢN LÝ THÔNG BÁO (TOAST) ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            // Thiết lập màu sắc theo type
+            let bgClass = 'bg-slate-800 border-emerald-500';
+            let icon = '<i class="fa-solid fa-circle-check text-emerald-500"></i>';
+            if (type === 'error') {
+                bgClass = 'bg-slate-800 border-rose-500';
+                icon = '<i class="fa-solid fa-circle-exclamation text-rose-500"></i>';
+            } else if (type === 'info') {
+                bgClass = 'bg-slate-800 border-amber-500';
+                icon = '<i class="fa-solid fa-triangle-exclamation text-amber-500"></i>';
+            }
+
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl border shadow-xl text-sm text-white ${bgClass} transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto`;
+            toast.innerHTML = `
+                <div class="text-lg">${icon}</div>
+                <div class="font-medium">${message}</div>
+                <button onclick="this.parentElement.remove()" class="ml-auto text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            // Tự động xóa sau 4 giây
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y--2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // --- 3. TIỆN ÍCH BẢO MẬT: MẬT MÃ HÓA SHA-256 (Client-side) ---
+        async function hashPassword(password) {
+            const msgUint8 = new TextEncoder().encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // --- 4. CHUYỂN ĐỔI MÀN HÌNH / GIAO DIỆN ---
+        function switchScreen(screenId) {
+            // Danh sách các màn hình lớn
+            ['setup-screen', 'login-screen', 'app-screen'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+            
+            // Ẩn màn hình loading
+            const loading = document.getElementById('loading-screen');
+            loading.classList.add('opacity-0');
+            setTimeout(() => loading.classList.add('hidden'), 300);
+        }
+
+        function switchMainView(view) {
+            const readerView = document.getElementById('reader-view');
+            const adminView = document.getElementById('admin-view');
+            const adminBtn = document.getElementById('admin-panel-btn');
+            const readerBtn = document.getElementById('reader-view-btn');
+
+            if (view === 'admin') {
+                readerView.classList.add('hidden');
+                adminView.classList.remove('hidden');
+                adminBtn.classList.add('hidden');
+                readerBtn.classList.remove('hidden');
+                loadUsersList(); // Tải lại danh sách tài khoản mới nhất
+            } else {
+                adminView.classList.add('hidden');
+                readerView.classList.remove('hidden');
+                readerBtn.classList.add('hidden');
+                if (currentUser && currentUser.role === 'admin') {
+                    adminBtn.classList.remove('hidden');
+                }
+            }
+        }
+
+        function togglePasswordVisibility(fieldId, button) {
+            const field = document.getElementById(fieldId);
+            const icon = button.querySelector('i');
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash';
+            } else {
+                field.type = 'password';
+                icon.className = 'fa-solid fa-eye';
+            }
+        }
+
+        // --- 5. KHỞI TẠO HOẶC CẤU HÌNH SUPABASE ---
+        window.addEventListener('DOMContentLoaded', () => {
+            // Kiểm tra xem đã có dữ liệu lưu trữ local chưa
+            const savedUrl = localStorage.getItem('supabase_url');
+            const savedKey = localStorage.getItem('supabase_key');
+
+            if (savedUrl && savedKey) {
+                try {
+                    // Khởi tạo Supabase client từ đối tượng thư viện toàn cục 'supabase'
+                    supabaseClient = supabase.createClient(savedUrl, savedKey);
+                    checkAutoLogin();
+                } catch (e) {
+                    showToast("Cấu hình Supabase lưu trong máy bị lỗi, hãy nhập lại!", "error");
+                    openConfig();
+                }
+            } else {
+                // Chưa cấu hình -> hiện màn hình setup
+                switchScreen('setup-screen');
+            }
+        });
+
+        // Xử lý nộp form cấu hình Supabase
+        document.getElementById('setup-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const url = document.getElementById('setup-url').value.trim();
+            const key = document.getElementById('setup-key').value.trim();
+
+            try {
+                // Thử tạo client từ thư viện toàn cục 'supabase'
+                supabaseClient = supabase.createClient(url, key);
+                // Lưu vào LocalStorage
+                localStorage.setItem('supabase_url', url);
+                localStorage.setItem('supabase_key', key);
+                
+                showToast("Cấu hình Supabase thành công!", "success");
+                checkAutoLogin();
+            } catch (error) {
+                showToast("Dữ liệu nhập vào không hợp lệ. Vui lòng kiểm tra lại!", "error");
+            }
+        });
+
+        function openConfig() {
+            // Cho phép người dùng chỉnh sửa cấu hình Supabase bất kì lúc nào
+            const savedUrl = localStorage.getItem('supabase_url') || "";
+            const savedKey = localStorage.getItem('supabase_key') || "";
+            
+            document.getElementById('setup-url').value = savedUrl;
+            document.getElementById('setup-key').value = savedKey;
+            
+            switchScreen('setup-screen');
+        }
+
+        // --- 6. XỬ LÝ ĐĂNG NHẬP (AUTHENTICATION) ---
+        async function checkAutoLogin() {
+            // Kiểm tra session hiện có để duy trì đăng nhập qua cookie/session
+            const sessionUser = sessionStorage.getItem('logged_user');
+            if (sessionUser) {
+                try {
+                    currentUser = JSON.parse(sessionUser);
+                    enterApp();
+                } catch (e) {
+                    sessionStorage.removeItem('logged_user');
+                    switchScreen('login-screen');
+                }
+            } else {
+                switchScreen('login-screen');
+            }
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userIn = document.getElementById('login-username').value.trim();
+            const passIn = document.getElementById('login-password').value;
+
+            if (!supabaseClient) {
+                showToast("Chưa khởi tạo kết nối Supabase!", "error");
+                return;
+            }
+
+            try {
+                // Mã hóa password nhập vào để so khớp với DB
+                const hashedInputPassword = await hashPassword(passIn);
+
+                // Truy vấn tìm tài khoản khớp username
+                const { data, error } = await supabaseClient
+                    .from('user_accounts')
+                    .select('*')
+                    .eq('username', userIn)
+                    .single();
+
+                if (error || !data) {
+                    showToast("Tài khoản không tồn tại trên hệ thống!", "error");
+                    return;
+                }
+
+                // Kiểm tra mật khẩu mã hóa
+                if (data.password === hashedInputPassword) {
+                    currentUser = {
+                        id: data.id,
+                        username: data.username,
+                        role: data.role
+                    };
+                    
+                    // Lưu session tạm thời
+                    sessionStorage.setItem('logged_user', JSON.stringify(currentUser));
+                    
+                    showToast(`Chào mừng ${currentUser.username} đăng nhập thành công!`, "success");
+                    enterApp();
+                    
+                    // Reset form đăng nhập
+                    document.getElementById('login-form').reset();
+                } else {
+                    showToast("Mật khẩu đăng nhập không chính xác!", "error");
+                }
+            } catch (error) {
+                console.error(error);
+                showToast("Có lỗi xảy ra trong quá trình kiểm tra đăng nhập!", "error");
+            }
+        });
+
+        // Đi vào giao diện sau khi đăng nhập thành công
+        function enterApp() {
+            switchScreen('app-screen');
+            
+            // Hiển thị vai trò người dùng trên thanh Header
+            const badge = document.getElementById('user-badge');
+            const adminBtn = document.getElementById('admin-panel-btn');
+            
+            if (currentUser.role === 'admin') {
+                badge.innerHTML = `<span class="text-amber-400 font-bold"><i class="fa-solid fa-user-shield"></i> Quản Trị Viên</span> (${currentUser.username})`;
+                adminBtn.classList.remove('hidden');
+                switchMainView('admin'); // Mở trang quản lý tài khoản mặc định cho Admin
+            } else {
+                badge.innerHTML = `<span class="text-emerald-400"><i class="fa-solid fa-user"></i> Học Viên</span> (${currentUser.username})`;
+                adminBtn.classList.add('hidden');
+                switchMainView('reader'); // Mở trực tiếp trang đọc sách cho User
+            }
+        }
+
+        // Xử lý Đăng xuất
+        function handleLogout() {
+            currentUser = null;
+            sessionStorage.removeItem('logged_user');
+            showToast("Bạn đã đăng xuất khỏi hệ thống thành công!", "success");
+            switchScreen('login-screen');
+        }
+
+        // --- 7. CHỨC NĂNG QUẢN TRỊ (ADMIN PANEL) ---
+        
+        // Tải danh sách tài khoản thành viên từ Supabase
+        async function loadUsersList() {
+            if (!supabaseClient || !currentUser || currentUser.role !== 'admin') return;
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('user_accounts')
+                    .select('id, username, role, created_at')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                usersData = data || [];
+                renderUsersTable();
+            } catch (err) {
+                console.error(err);
+                showToast("Lỗi tải danh sách tài khoản: " + err.message, "error");
+            }
+        }
+
+        // Hiển thị dữ liệu danh sách lên giao diện bảng
+        function renderUsersTable() {
+            const tableBody = document.getElementById('user-list-body');
+            const userCountBadge = document.getElementById('user-count-badge');
+            
+            userCountBadge.innerText = `${usersData.length} tài khoản`;
+            tableBody.innerHTML = '';
+
+            if (usersData.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="px-6 py-10 text-center text-slate-500">
+                            <i class="fa-solid fa-users-slash text-3xl mb-2 block"></i>
+                            Chưa có tài khoản nào được tạo.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            usersData.forEach(user => {
+                const date = new Date(user.created_at).toLocaleDateString('vi-VN', {
+                    year: 'numeric', month: '2-digit', day: '2-digit',
+                    hour: '2-digit', minute: '2-digit'
+                });
+
+                // Set Badge vai trò khác nhau
+                const roleBadge = user.role === 'admin' 
+                    ? `<span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20"><i class="fa-solid fa-shield-halved mr-1"></i>Admin</span>`
+                    : `<span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20"><i class="fa-solid fa-user-graduate mr-1"></i>User</span>`;
+
+                // Vô hiệu hóa nút xóa nếu đó là tài khoản của chính admin đang đăng nhập
+                const isSelf = user.username === currentUser.username;
+                const deleteBtn = isSelf 
+                    ? `<span class="text-slate-500 text-xs italic">Đang sử dụng</span>`
+                    : `<button onclick="deleteUser('${user.id}', '${user.username}')" class="text-rose-500 hover:text-rose-400 hover:bg-rose-500/10 px-3 py-1.5 rounded-lg transition text-xs font-medium flex items-center gap-1 mx-auto">
+                           <i class="fa-solid fa-trash"></i> Xóa
+                       </button>`;
+
+                tableBody.innerHTML += `
+                    <tr class="hover:bg-slate-700/30 transition">
+                        <td class="px-6 py-4 font-medium text-white">${user.username}</td>
+                        <td class="px-6 py-4">${roleBadge}</td>
+                        <td class="px-6 py-4 text-xs text-slate-400">${date}</td>
+                        <td class="px-6 py-4 text-center">${deleteBtn}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Tạo & cấp tài khoản mới
+        document.getElementById('create-user-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const newUsername = document.getElementById('create-username').value.trim();
+            const newPassword = document.getElementById('create-password').value;
+            const newRole = document.getElementById('create-role').value;
+
+            // Kiểm tra quy tắc nghiệp vụ
+            if (newUsername.length < 3) {
+                showToast("Tên tài khoản tối thiểu phải có 3 kí tự!", "info");
+                return;
+            }
+            if (newPassword.length < 6) {
+                showToast("Mật khẩu tối thiểu phải từ 6 ký tự trở lên!", "info");
+                return;
+            }
+
+            try {
+                // 1. Kiểm tra chống trùng lặp tài khoản (Unique check trước khi ghi đè)
+                const { data: existingUser, error: checkError } = await supabaseClient
+                    .from('user_accounts')
+                    .select('username')
+                    .eq('username', newUsername)
+                    .maybeSingle();
+
+                if (checkError) throw checkError;
+
+                if (existingUser) {
+                    showToast(`Tên tài khoản "${newUsername}" đã tồn tại. Vui lòng chọn tên đăng nhập khác!`, "error");
+                    return;
+                }
+
+                // 2. Mã hóa mật khẩu bảo mật trước khi lưu
+                const securePassword = await hashPassword(newPassword);
+
+                // 3. Tiến hành insert vào database Supabase
+                const { error: insertError } = await supabaseClient
+                    .from('user_accounts')
+                    .insert([
+                        { username: newUsername, password: securePassword, role: newRole }
+                    ]);
+
+                if (insertError) throw insertError;
+
+                showToast(`Cấp thành công tài khoản "${newUsername}"!`, "success");
+                
+                // Reset form nhập
+                document.getElementById('create-user-form').reset();
+                
+                // Tải lại danh sách cập nhật mới nhất
+                loadUsersList();
+
+            } catch (err) {
+                console.error(err);
+                showToast("Có lỗi bất thường xảy ra: " + err.message, "error");
+            }
+        });
+
+        // Xóa tài khoản
+        async function deleteUser(id, username) {
+            // Xác nhận bằng modal ảo tự làm thay thế alert/confirm
+            if (confirm(`Bạn có chắc chắn muốn xóa tài khoản "${username}"?`)) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('user_accounts')
+                        .delete()
+                        .eq('id', id);
+
+                    if (error) throw error;
+
+                    showToast(`Đã xóa thành công tài khoản "${username}"!`, "success");
+                    loadUsersList();
+                } catch (err) {
+                    console.error(err);
+                    showToast("Không thể xóa tài khoản này: " + err.message, "error");
+                }
+            }
+        }
+    </script>
+</body>
+</html>
