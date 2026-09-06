@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tổng Hợp Ngữ Pháp Tiếng Thái – 22 Chương | THÁI DỄ HỌC</title>
+  <meta name="description" content="Bộ tài liệu tổng hợp ngữ pháp tiếng Thái 22 chương, hơn 400 trang. Từ chữ cái cơ bản đến cấu trúc nâng cao, dễ tra cứu và học theo hệ thống." />
+  <meta property="og:title" content="Tổng Hợp Ngữ Pháp Tiếng Thái – 22 Chương" />
+  <meta property="og:description" content="Hơn 400 trang, từ nền tảng đến nâng cao. Một tài liệu để học, ôn và tra cứu ngữ pháp tiếng Thái lâu dài." />
+  <meta name="theme-color" content="#5B3FD6" />
+  <style>
+    :root{
+      --primary:#5B3FD6;
+      --primary-2:#7C5CFC;
+      --accent:#FF8A3D;
+      --accent-2:#FFC46B;
+      --ink:#201B2C;
+      --muted:#6E687A;
+      --bg:#FCFAFF;
+      --card:#FFFFFF;
+      --line:#E9E3F7;
+      --soft:#F3EEFF;
+      --success:#149B63;
+      --shadow:0 18px 50px rgba(62,40,120,.12);
+      --radius:24px;
+      --radius-sm:16px;
+      --max:1140px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124,92,252,.13), transparent 34%),
+        radial-gradient(circle at top right, rgba(255,138,61,.12), transparent 30%),
+        var(--bg);
+      color:var(--ink);
+      line-height:1.65;
+    }
+
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    .container{width:min(calc(100% - 32px), var(--max));margin:auto}
+    .section{padding:84px 0}
+    .section-sm{padding:54px 0}
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 13px;
+      border-radius:999px;
+      background:var(--soft);
+      color:var(--primary);
+      font-weight:800;
+      font-size:14px;
+      letter-spacing:.01em;
+    }
+    h1,h2,h3{line-height:1.15;margin:0 0 18px}
+    h1{font-size:clamp(40px,6vw,72px);letter-spacing:-.04em}
+    h2{font-size:clamp(30px,4vw,48px);letter-spacing:-.03em}
+    h3{font-size:22px}
+    p{margin:0 0 16px}
+    .lead{font-size:clamp(18px,2.3vw,22px);color:#514A61;max-width:780px}
+    .muted{color:var(--muted)}
+    .strong{font-weight:800}
+
+    .topbar{
+      background:#241B46;
+      color:#fff;
+      text-align:center;
+      padding:10px 16px;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .nav{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter:blur(14px);
+      background:rgba(252,250,255,.88);
+      border-bottom:1px solid rgba(91,63,214,.08);
+    }
+    .nav-inner{
+      min-height:68px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      letter-spacing:-.02em;
+    }
+    .brand-mark{
+      width:38px;height:38px;border-radius:12px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      color:#fff;font-weight:900;
+      box-shadow:0 10px 24px rgba(91,63,214,.25);
+    }
+    .nav-links{display:flex;gap:24px;align-items:center;color:#5C5568;font-weight:700;font-size:14px}
+    .nav-links a:hover{color:var(--primary)}
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      border:0;
+      border-radius:14px;
+      padding:15px 22px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.2s ease;
+      font-size:16px;
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{
+      color:white;
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      box-shadow:0 14px 28px rgba(91,63,214,.28);
+    }
+    .btn-accent{
+      color:#2a1809;
+      background:linear-gradient(135deg,var(--accent-2),var(--accent));
+      box-shadow:0 14px 28px rgba(255,138,61,.22);
+    }
+    .btn-ghost{
+      background:#fff;
+      color:var(--primary);
+      border:1px solid var(--line);
+    }
+
+    .hero{padding:88px 0 72px;overflow:hidden}
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:46px;
+      align-items:center;
+    }
+    .hero-copy .lead{margin-bottom:26px}
+    .hero-points{
+      display:grid;
+      gap:12px;
+      margin:28px 0 30px;
+    }
+    .hero-point{
+      display:flex;gap:12px;align-items:flex-start;
+      font-weight:700;
+    }
+    .check{
+      width:24px;height:24px;border-radius:50%;
+      flex:none;
+      display:grid;place-items:center;
+      background:#E8F8F0;color:var(--success);
+      font-size:14px;font-weight:900;margin-top:2px;
+    }
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+    .hero-note{font-size:13px;color:var(--muted);margin-top:14px}
+
+    .book-wrap{
+      position:relative;
+      min-height:520px;
+      display:grid;
+      place-items:center;
+    }
+    .orb{
+      position:absolute;
+      width:420px;height:420px;border-radius:50%;
+      background:linear-gradient(135deg,rgba(91,63,214,.18),rgba(255,138,61,.14));
+      filter:blur(2px);
+    }
+    .book{
+      position:relative;
+      width:min(390px,92%);
+      padding:36px;
+      border-radius:28px;
+      color:white;
+      background:
+        linear-gradient(150deg,rgba(255,255,255,.11),rgba(255,255,255,0)),
+        linear-gradient(145deg,#35206F,#6C49E5 62%,#8C67FF);
+      box-shadow:0 34px 70px rgba(50,29,110,.34);
+      transform:rotate(-3deg);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .book:before{
+      content:"";
+      position:absolute;
+      inset:14px auto 14px 14px;
+      width:7px;border-radius:8px;
+      background:linear-gradient(#FFB35A,#FF7D39);
+      opacity:.95;
+    }
+    .book small{opacity:.8;font-weight:800;letter-spacing:.12em}
+    .book h3{font-size:34px;margin-top:26px}
+    .book .thai{font-size:26px;font-weight:900;margin:10px 0 26px}
+    .book-meta{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;margin-top:34px;
+    }
+    .book-meta div{
+      padding:13px 14px;border-radius:14px;
+      background:rgba(255,255,255,.11);
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .book-meta strong{display:block;font-size:24px}
+    .float-card{
+      position:absolute;
+      border-radius:16px;
+      background:white;
+      padding:15px 18px;
+      box-shadow:var(--shadow);
+      font-weight:800;
+    }
+    .f1{top:40px;right:0}
+    .f2{bottom:34px;left:0}
+
+    .trust{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:-10px;
+    }
+    .trust-card{
+      background:rgba(255,255,255,.82);
+      border:1px solid var(--line);
+      padding:22px;border-radius:18px;
+      box-shadow:0 10px 28px rgba(58,37,111,.06);
+    }
+    .trust-card strong{display:block;font-size:20px;margin-bottom:6px}
+
+    .problem-grid,.benefit-grid,.audience-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+      margin-top:36px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius-sm);
+      padding:26px;
+      box-shadow:0 10px 28px rgba(53,36,102,.05);
+    }
+    .icon{
+      width:48px;height:48px;border-radius:14px;
+      display:grid;place-items:center;
+      margin-bottom:18px;
+      background:var(--soft);
+      font-size:24px;
+    }
+
+    .pain{
+      background:#251B43;
+      color:#fff;
+      border-radius:32px;
+      padding:44px;
+      display:grid;
+      grid-template-columns:.9fr 1.1fr;
+      gap:40px;
+      align-items:center;
+    }
+    .pain .muted{color:#C7BEDA}
+    .pain-list{display:grid;gap:14px}
+    .pain-item{
+      padding:16px 18px;
+      border-radius:14px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.1);
+    }
+
+    .highlight{
+      background:linear-gradient(135deg,#F4EEFF,#FFF3E7);
+      border:1px solid #E8DDFB;
+      border-radius:30px;
+      padding:42px;
+    }
+    .highlight-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:28px;
+    }
+    .stat{
+      background:white;
+      padding:22px;
+      border-radius:17px;
+      border:1px solid rgba(91,63,214,.1);
+    }
+    .stat b{font-size:30px;display:block;color:var(--primary)}
+
+    .chapters{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:30px;
+    }
+    .chapter{
+      display:flex;gap:12px;align-items:flex-start;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:15px;
+    }
+    .chapter-num{
+      width:42px;height:42px;border-radius:12px;flex:none;
+      display:grid;place-items:center;
+      background:var(--soft);
+      color:var(--primary);font-weight:900;
+    }
+    .chapter strong{display:block;margin-bottom:2px}
+
+    .how{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;margin-top:34px;
+    }
+    .step{
+      padding:26px;border-radius:18px;
+      background:#fff;border:1px solid var(--line);
+      position:relative;
+    }
+    .step-no{
+      font-size:52px;font-weight:900;color:#E8DFFF;
+      position:absolute;right:18px;top:6px;line-height:1;
+    }
+
+    .quote{
+      padding:30px;
+      border-left:5px solid var(--accent);
+      background:#FFF8F1;
+      border-radius:0 18px 18px 0;
+      font-size:20px;
+      font-weight:750;
+    }
+
+    .offer{
+      display:grid;
+      grid-template-columns:1fr .9fr;
+      gap:34px;
+      align-items:stretch;
+    }
+    .offer-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:34px;
+      box-shadow:var(--shadow);
+    }
+    .offer-card.bank{
+      background:linear-gradient(145deg,#2C1E56,#5B3FD6);
+      color:white;border:0;
+    }
+    .bank-row{
+      display:flex;justify-content:space-between;gap:20px;
+      padding:14px 0;border-bottom:1px solid rgba(255,255,255,.14);
+    }
+    .bank-row:last-child{border-bottom:0}
+    .bank-label{opacity:.72}
+    .bank-value{font-weight:900;text-align:right}
+    .copy-btn{
+      margin-top:18px;width:100%;
+      background:white;color:var(--primary);
+    }
+    .copy-status{
+      font-size:13px;margin-top:10px;opacity:.85;text-align:center;min-height:20px;
+    }
+
+    .cta-list{display:grid;gap:12px;margin:22px 0}
+    .cta-list div{display:flex;gap:10px;align-items:flex-start}
+
+    .faq{display:grid;gap:12px;margin-top:28px}
+    details{
+      background:white;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:18px 20px;
+    }
+    summary{cursor:pointer;font-weight:900}
+    details p{margin-top:12px;color:var(--muted)}
+
+    .final-cta{
+      text-align:center;
+      padding:58px 28px;
+      border-radius:32px;
+      color:#fff;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,.15), transparent 24%),
+        linear-gradient(135deg,#34206D,#6D4DE4 65%,#805CF4);
+    }
+    .final-cta p{max-width:720px;margin:0 auto 24px;color:#EDE8FF}
+
+    footer{
+      padding:38px 0 80px;
+      color:var(--muted);
+      text-align:center;
+      font-size:14px;
+    }
+
+    .zalo-float{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:100;
+      width:58px;height:58px;
+      border-radius:50%;
+      display:grid;place-items:center;
+      background:#0068FF;
+      color:white;
+      font-weight:900;
+      box-shadow:0 16px 34px rgba(0,104,255,.32);
+      border:4px solid white;
+      transition:.2s ease;
+    }
+    .zalo-float:hover{transform:translateY(-3px) scale(1.03)}
+    .zalo-float span{font-size:14px;letter-spacing:-.03em}
+
+    .sticky-buy{
+      display:none;
+    }
+
+    @media (max-width:900px){
+      .nav-links{display:none}
+      .hero-grid,.pain,.offer{grid-template-columns:1fr}
+      .trust,.problem-grid,.benefit-grid,.audience-grid,.how{grid-template-columns:1fr}
+      .highlight-grid{grid-template-columns:1fr 1fr}
+      .chapters{grid-template-columns:1fr}
+      .book-wrap{min-height:460px}
+      .hero{padding-top:58px}
+      .section{padding:64px 0}
+      .f1{right:4px}
+      .f2{left:6px}
+      .sticky-buy{
+        display:flex;
+        position:fixed;
+        left:12px;right:84px;bottom:18px;
+        z-index:90;
+      }
+      .sticky-buy .btn{width:100%}
+    }
+    @media (max-width:560px){
+      h1{font-size:42px}
+      .highlight-grid{grid-template-columns:1fr}
+      .hero-actions .btn{width:100%}
+      .book{padding:30px 26px}
+      .pain,.highlight,.offer-card{padding:26px}
+      .section{padding:54px 0}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">Một tài liệu để HỌC – ÔN – TRA CỨU ngữ pháp tiếng Thái lâu dài</div>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top">
+        <div class="brand-mark">TH</div>
+        <div>THÁI DỄ HỌC</div>
+      </a>
+      <div class="nav-links">
+        <a href="#loi-ich">Lợi ích</a>
+        <a href="#noi-dung">22 chương</a>
+        <a href="#phu-hop">Phù hợp với ai?</a>
+        <a href="#mua-ngay">Mua tài liệu</a>
+      </div>
+      <a class="btn btn-primary" href="#mua-ngay">Nhận tài liệu</a>
+    </div>
+  </nav>
+
+  <main id="top">
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">📘 BỘ TỔNG HỢP NGỮ PHÁP TIẾNG THÁI</span>
+          <h1>Đừng học ngữ pháp tiếng Thái theo từng mảnh rời rạc.</h1>
+          <p class="lead">
+            Hãy có <strong>một hệ thống hoàn chỉnh để học từ nền tảng đến nâng cao</strong>,
+            và quan trọng hơn: khi quên một cấu trúc, bạn biết chính xác phải mở ở đâu để tìm lại.
+          </p>
+
+          <div class="hero-points">
+            <div class="hero-point"><span class="check">✓</span><span><strong>22 chương</strong> – đi từ chữ cái, âm vị, câu cơ bản đến mệnh đề, văn phong, thành ngữ và đọc hiểu.</span></div>
+            <div class="hero-point"><span class="check">✓</span><span><strong>Hơn 400 trang Google Docs</strong> – đủ sâu để dùng như một “sổ tay ngữ pháp” lâu dài.</span></div>
+            <div class="hero-point"><span class="check">✓</span><span><strong>Tra cứu cực nhanh</strong> – bấm mục lục để nhảy tới phần cần học hoặc dùng <strong>Ctrl + F</strong> theo từ khóa.</span></div>
+          </div>
+
+          <div class="hero-actions">
+            <a class="btn btn-accent" href="#mua-ngay">Tôi muốn sở hữu bộ tài liệu</a>
+            <a class="btn btn-ghost" href="#noi-dung">Xem 22 chương gồm gì</a>
+          </div>
+
+          <div class="hero-note">Phù hợp cho người tự học, người đã học lâu nhưng kiến thức rời rạc, giáo viên và người cần tiếng Thái cho công việc.</div>
+        </div>
+
+        <div class="book-wrap">
+          <div class="orb"></div>
+          <div class="book">
+            <small>THÁI DỄ HỌC</small>
+            <h3>TỔNG HỢP<br>NGỮ PHÁP<br>TIẾNG THÁI</h3>
+            <div class="thai">ไวยากรณ์ภาษาไทย</div>
+            <p>Từ nền tảng chữ viết đến ngữ pháp nâng cao, discourse, văn phong và đọc hiểu.</p>
+            <div class="book-meta">
+              <div><strong>22</strong>chương</div>
+              <div><strong>400+</strong>trang</div>
+              <div><strong>1</strong>tài liệu</div>
+              <div><strong>∞</strong>lần tra cứu</div>
+            </div>
+          </div>
+          <div class="float-card f1">⚡ Ctrl + F là tìm thấy</div>
+          <div class="float-card f2">🔗 Mục lục có liên kết</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container trust">
+        <div class="trust-card">
+          <strong>Học có bản đồ</strong>
+          <span class="muted">Biết kiến thức nào học trước, kiến thức nào học sau.</span>
+        </div>
+        <div class="trust-card">
+          <strong>Tra cứu có hệ thống</strong>
+          <span class="muted">Không còn lục lại hàng chục bài Facebook, note hay file rời.</span>
+        </div>
+        <div class="trust-card">
+          <strong>Dùng được lâu dài</strong>
+          <span class="muted">Không chỉ đọc một lần, mà là tài liệu để quay lại nhiều năm.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="pain">
+          <div>
+            <span class="eyebrow">VẤN ĐỀ KHÔNG PHẢI BẠN HỌC ÍT</span>
+            <h2 style="margin-top:16px">Mà là bạn đang học quá nhiều thứ… nhưng thiếu một hệ thống.</h2>
+            <p class="muted">Người học tiếng Thái rất dễ rơi vào tình trạng biết nhiều mẩu kiến thức nhưng khi cần nói, viết hoặc kiểm tra lại thì không biết chúng nằm ở đâu và liên kết với nhau thế nào.</p>
+          </div>
+          <div class="pain-list">
+            <div class="pain-item">❌ Học ngữ pháp từ nhiều nguồn, mỗi nơi giải thích một kiểu.</div>
+            <div class="pain-item">❌ Hiểu từng cấu trúc riêng nhưng không thấy bức tranh tổng thể.</div>
+            <div class="pain-item">❌ Mỗi lần quên lại phải tìm Google, Facebook hoặc hỏi lại từ đầu.</div>
+            <div class="pain-item">❌ Học nhiều năm nhưng vẫn lẫn giữa khẩu ngữ, văn viết và ngôn ngữ trang trọng.</div>
+            <div class="pain-item">❌ Muốn ôn lại nhưng không biết nên bắt đầu từ chương nào.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="loi-ich">
+      <div class="container">
+        <span class="eyebrow">GIÁ TRỊ BẠN NHẬN ĐƯỢC</span>
+        <h2 style="margin-top:16px">Không phải thêm một file để “cất vào máy”.<br>Mà là một <span style="color:var(--primary)">hệ thống tham chiếu ngữ pháp</span> của riêng bạn.</h2>
+
+        <div class="benefit-grid">
+          <div class="card">
+            <div class="icon">🧭</div>
+            <h3>Biết mình đang ở đâu</h3>
+            <p class="muted">Nhìn toàn bộ 22 chương, bạn biết kiến thức hiện tại nằm ở tầng nào: âm vị, từ loại, câu, mệnh đề, discourse hay văn phong.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🔎</div>
+            <h3>Tìm lại trong vài giây</h3>
+            <p class="muted">Nhớ mang máng một cấu trúc? Dùng Ctrl + F. Quan tâm một chủ đề? Bấm trực tiếp trong mục lục để tới đúng phần.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🧠</div>
+            <h3>Hiểu logic, không học thuộc máy móc</h3>
+            <p class="muted">Tài liệu ưu tiên giải thích vì sao dùng cấu trúc đó, sắc thái gì, khác cấu trúc gần nghĩa ra sao và lỗi người Việt thường mắc.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🗣️</div>
+            <h3>Nói tự nhiên hơn</h3>
+            <p class="muted">Không dừng ở ngữ pháp “đúng”, tài liệu còn đi tới khẩu ngữ, tiểu từ, cách nối ý và register để câu nói gần cách người Thái thực sự dùng.</p>
+          </div>
+          <div class="card">
+            <div class="icon">✍️</div>
+            <h3>Viết đúng bối cảnh hơn</h3>
+            <p class="muted">Biết khi nào dùng văn nói, khi nào cần văn viết, email, hành chính, báo chí hoặc cách diễn đạt trang trọng.</p>
+          </div>
+          <div class="card">
+            <div class="icon">📚</div>
+            <h3>Có tài liệu để quay lại nhiều năm</h3>
+            <p class="muted">Đây không phải tài liệu “học xong là bỏ”, mà là cuốn sổ tay để ôn, tra, chuẩn bị bài, dịch và kiểm tra cách dùng bất cứ khi nào cần.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container highlight">
+        <span class="eyebrow">MỘT FILE – MỘT HỆ THỐNG</span>
+        <h2 style="margin-top:16px">Bạn không cần nhớ hết. Bạn chỉ cần biết <em>tìm lại ở đâu</em>.</h2>
+        <div class="highlight-grid">
+          <div class="stat"><b>22</b>chương có hệ thống</div>
+          <div class="stat"><b>400+</b>trang nội dung</div>
+          <div class="stat"><b>Ctrl + F</b>tìm theo từ khóa</div>
+          <div class="stat"><b>1 click</b>nhảy tới mục cần học</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="noi-dung">
+      <div class="container">
+        <span class="eyebrow">NỘI DUNG TỪ CƠ BẢN ĐẾN NÂNG CAO</span>
+        <h2 style="margin-top:16px">22 chương đi từ “đọc được” đến “dùng được” và “hiểu sâu”.</h2>
+        <p class="lead">Không chỉ gom kiến thức. Cấu trúc tài liệu đi theo tiến trình từ nền móng → câu → mệnh đề → discourse → register → văn hóa & đọc hiểu.</p>
+
+        <div class="chapters">
+          <div class="chapter"><div class="chapter-num">01</div><div><strong>Âm vị & chữ viết</strong><span class="muted">Phụ âm, nguyên âm, thanh điệu, quy tắc đọc.</span></div></div>
+          <div class="chapter"><div class="chapter-num">02</div><div><strong>Danh từ & cụm danh từ</strong><span class="muted">Danh từ, lượng từ, sở hữu, chỉ định.</span></div></div>
+          <div class="chapter"><div class="chapter-num">03</div><div><strong>Đại từ & từ xưng hô</strong><span class="muted">Đại từ và hệ thống quan hệ xã hội.</span></div></div>
+          <div class="chapter"><div class="chapter-num">04</div><div><strong>Động từ & cụm động từ</strong><span class="muted">Động từ, chuỗi động từ, phương hướng, kết quả.</span></div></div>
+          <div class="chapter"><div class="chapter-num">05</div><div><strong>Tính từ & trạng từ</strong><span class="muted">Mức độ, tần suất, thời gian, so sánh.</span></div></div>
+          <div class="chapter"><div class="chapter-num">06</div><div><strong>Trợ từ & tiểu từ</strong><span class="muted">ไหม, เหรอ, นะ, สิ, เลย và sắc thái giao tiếp.</span></div></div>
+          <div class="chapter"><div class="chapter-num">07</div><div><strong>Phủ định</strong><span class="muted">ไม่, ไม่ได้, อย่า, ยังไม่ và khác biệt chức năng.</span></div></div>
+          <div class="chapter"><div class="chapter-num">08</div><div><strong>Nghi vấn</strong><span class="muted">Yes/No, Wh-question, lựa chọn, tag question.</span></div></div>
+          <div class="chapter"><div class="chapter-num">09</div><div><strong>Câu đơn & câu ghép</strong><span class="muted">SVO, liên từ, mệnh đề quan hệ.</span></div></div>
+          <div class="chapter"><div class="chapter-num">10</div><div><strong>Thì & khía cạnh</strong><span class="muted">แล้ว, กำลัง, จะ, เคย và trạng thái sự kiện.</span></div></div>
+          <div class="chapter"><div class="chapter-num">11</div><div><strong>Câu điều kiện</strong><span class="muted">ถ้า, เมื่อ, ก่อน, หลัง, จนกว่า.</span></div></div>
+          <div class="chapter"><div class="chapter-num">12</div><div><strong>Câu bị động</strong><span class="muted">ถูก, โดน, ได้รับ và sắc thái “bị/được”.</span></div></div>
+          <div class="chapter"><div class="chapter-num">13</div><div><strong>Câu cầu khiến</strong><span class="muted">ให้, ทำให้, สั่งให้.</span></div></div>
+          <div class="chapter"><div class="chapter-num">14</div><div><strong>Lượng hóa & so sánh</strong><span class="muted">บาง, ทุก, หลาย, กว่า, ที่สุด, ยิ่ง...ยิ่ง...</span></div></div>
+          <div class="chapter"><div class="chapter-num">15</div><div><strong>Giới từ & cụm giới từ</strong><span class="muted">Không gian, thời gian, hướng, mục đích.</span></div></div>
+          <div class="chapter"><div class="chapter-num">16</div><div><strong>Mệnh đề phụ</strong><span class="muted">ว่า, เพราะ, ถ้า, เมื่อ, ที่ và câu gián tiếp.</span></div></div>
+          <div class="chapter"><div class="chapter-num">17</div><div><strong>Từ nối & discourse</strong><span class="muted">Nối logic, chuyển ý, nhấn mạnh, tổng kết.</span></div></div>
+          <div class="chapter"><div class="chapter-num">18</div><div><strong>Văn nói & khẩu ngữ</strong><span class="muted">Rút gọn, slang, chat, từ biểu cảm.</span></div></div>
+          <div class="chapter"><div class="chapter-num">19</div><div><strong>Văn viết & trang trọng</strong><span class="muted">Hành chính, email, báo chí, register.</span></div></div>
+          <div class="chapter"><div class="chapter-num">20</div><div><strong>ราชาศัพท์ – Rachasap</strong><span class="muted">Ngôn ngữ Hoàng gia và cách nhận diện.</span></div></div>
+          <div class="chapter"><div class="chapter-num">21</div><div><strong>Thành ngữ & tục ngữ</strong><span class="muted">Hình ảnh, nghĩa bóng, biểu tượng văn hóa.</span></div></div>
+          <div class="chapter"><div class="chapter-num">22</div><div><strong>Đọc hiểu & văn học</strong><span class="muted">Thơ, văn xuôi, phong cách viết và tầng nghĩa.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="phu-hop">
+      <div class="container">
+        <span class="eyebrow">AI SẼ NHẬN ĐƯỢC GIÁ TRỊ NHIỀU NHẤT?</span>
+        <h2 style="margin-top:16px">Bộ này đặc biệt phù hợp nếu bạn đang ở một trong 3 tình huống sau.</h2>
+
+        <div class="audience-grid">
+          <div class="card">
+            <div class="icon">🌱</div>
+            <h3>Người mới học</h3>
+            <p class="muted">Muốn có một lộ trình rõ ràng thay vì học mỗi ngày một chủ đề ngẫu nhiên.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🧩</div>
+            <h3>Người học lâu nhưng rời rạc</h3>
+            <p class="muted">Biết khá nhiều từ và mẫu câu nhưng cần ghép chúng thành một hệ thống logic.</p>
+          </div>
+          <div class="card">
+            <div class="icon">💼</div>
+            <h3>Người dùng tiếng Thái cho công việc</h3>
+            <p class="muted">Cần tra nhanh cách nói, cách viết, email, văn phong và sắc thái đúng bối cảnh.</p>
+          </div>
+        </div>
+
+        <div style="height:32px"></div>
+        <div class="quote">
+          “Giá trị lớn nhất của một tài liệu ngữ pháp không phải là bạn đọc hết 400 trang. Mà là sau 6 tháng, 1 năm hay 3 năm, khi gặp một cấu trúc khó, bạn vẫn biết chính xác phải quay về đâu để kiểm tra.”
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <span class="eyebrow">CÁCH DÙNG ĐỂ KHÔNG BỊ “NGỘP” 400+ TRANG</span>
+        <h2 style="margin-top:16px">Bạn không cần học từ trang 1 đến trang cuối.</h2>
+        <div class="how">
+          <div class="step">
+            <div class="step-no">1</div>
+            <h3>Học theo nhu cầu hiện tại</h3>
+            <p class="muted">Đang vướng lượng từ? Mở chương 2. Đang không hiểu ไม่ได้? Vào chương 7. Muốn nói tự nhiên hơn? Xem chương 18.</p>
+          </div>
+          <div class="step">
+            <div class="step-no">2</div>
+            <h3>Dùng mục lục như bản đồ</h3>
+            <p class="muted">Bấm trực tiếp vào chương/phần quan tâm thay vì cuộn hàng trăm trang.</p>
+          </div>
+          <div class="step">
+            <div class="step-no">3</div>
+            <h3>Ctrl + F khi cần tra nhanh</h3>
+            <p class="muted">Nhập từ khóa như “ไม่ได้”, “กว่า”, “ว่า”, “ภาษาเขียน”… và đi thẳng tới đoạn liên quan.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="mua-ngay">
+      <div class="container">
+        <div class="offer">
+          <div class="offer-card">
+            <span class="eyebrow">BẮT ĐẦU SỞ HỮU BỘ TÀI LIỆU</span>
+            <h2 style="margin-top:16px">Mua một lần, dùng như cuốn “bản đồ ngữ pháp” để học và tra cứu lâu dài.</h2>
+
+            <div class="cta-list">
+              <div><span class="check">✓</span><span>22 chương từ cơ bản đến nâng cao.</span></div>
+              <div><span class="check">✓</span><span>Hơn 400 trang Google Docs.</span></div>
+              <div><span class="check">✓</span><span>Mục lục có liên kết nội bộ.</span></div>
+              <div><span class="check">✓</span><span>Tìm kiếm nhanh bằng Ctrl + F.</span></div>
+              <div><span class="check">✓</span><span>Phù hợp để học mới, ôn lại và tra cứu lâu dài.</span></div>
+            </div>
+
+            <p class="muted"><strong>Cách nhận tài liệu:</strong> chuyển khoản theo thông tin bên cạnh, sau đó nhắn Zalo kèm ảnh giao dịch để được xác nhận và gửi tài liệu.</p>
+
+            <a class="btn btn-primary" style="width:100%;margin-top:8px" href="https://zalo.me/0987654321" target="_blank" rel="noopener">Nhắn Zalo sau khi chuyển khoản</a>
+          </div>
+
+          <div class="offer-card bank">
+            <span style="opacity:.8;font-weight:800">THÔNG TIN CHUYỂN KHOẢN</span>
+            <h2 style="margin-top:8px;color:white">VPBank</h2>
+
+            <div class="bank-row">
+              <div class="bank-label">Số tài khoản</div>
+              <div class="bank-value" id="accountNumber">658666886</div>
+            </div>
+            <div class="bank-row">
+              <div class="bank-label">Ngân hàng</div>
+              <div class="bank-value">VP Bank</div>
+            </div>
+            <div class="bank-row">
+              <div class="bank-label">Chủ tài khoản</div>
+              <div class="bank-value">CHU VAN CONG</div>
+            </div>
+
+            <button class="btn copy-btn" onclick="copyAccount()">📋 Sao chép số tài khoản</button>
+            <div class="copy-status" id="copyStatus"></div>
+
+            <div style="margin-top:24px;padding:16px;border-radius:16px;background:rgba(255,255,255,.1)">
+              <strong>Sau khi chuyển khoản</strong><br>
+              <span style="opacity:.82">Nhấn nút Zalo hoặc icon xanh ở góc màn hình và gửi ảnh giao dịch để xác nhận.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container">
+        <span class="eyebrow">CÂU HỎI THƯỜNG GẶP</span>
+        <div class="faq">
+          <details>
+            <summary>Tài liệu có phù hợp với người mới bắt đầu không?</summary>
+            <p>Có. Nội dung bắt đầu từ âm vị, chữ viết, danh từ, đại từ, động từ và câu cơ bản trước khi đi sang các phần nâng cao.</p>
+          </details>
+          <details>
+            <summary>Tôi đã học tiếng Thái khá lâu thì có còn hữu ích không?</summary>
+            <p>Có. Nhóm này thường nhận được giá trị lớn ở khả năng hệ thống hóa và tra cứu: những điểm dễ nhầm như ได้/ไม่ได้, tiểu từ, aspect, mệnh đề, discourse, khẩu ngữ và register được đặt trong cùng một hệ thống.</p>
+          </details>
+          <details>
+            <summary>Có phải đọc hết hơn 400 trang mới dùng được?</summary>
+            <p>Không. Tài liệu được thiết kế để bạn có thể học theo chương hoặc tra cứu theo nhu cầu. Mục lục có liên kết và Ctrl + F giúp đi thẳng tới phần cần tìm.</p>
+          </details>
+          <details>
+            <summary>Tài liệu ở định dạng nào?</summary>
+            <p>Tài liệu được cung cấp dưới dạng Google Docs, thuận tiện cho việc xem, tìm kiếm và di chuyển giữa các mục.</p>
+          </details>
+          <details>
+            <summary>Sau khi chuyển khoản tôi nhận tài liệu thế nào?</summary>
+            <p>Nhắn Zalo 0979086827 và gửi ảnh giao dịch để được xác nhận và gửi tài liệu.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container">
+        <div class="final-cta">
+          <h2>Đừng tiếp tục để kiến thức tiếng Thái nằm rải rác ở 20 nơi khác nhau.</h2>
+          <p>Gom chúng về một hệ thống duy nhất: có thứ tự, có mục lục, có khả năng tìm kiếm và đủ sâu để dùng làm tài liệu tham chiếu lâu dài.</p>
+          <a class="btn btn-accent" href="#mua-ngay">Xem thông tin chuyển khoản</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <strong>THÁI DỄ HỌC</strong><br>
+      Tài liệu học tiếng Thái dành cho người Việt muốn học có hệ thống, hiểu bản chất và dùng được trong thực tế.
+    </div>
+  </footer>
+
+  <a class="zalo-float" href="https://zalo.me/0979086827" target="_blank" rel="noopener" aria-label="Liên hệ Zalo">
+    <span>Zalo</span>
+  </a>
+
+  <div class="sticky-buy">
+    <a class="btn btn-accent" href="#mua-ngay">Nhận tài liệu</a>
+  </div>
+
+  <script>
+    function copyAccount(){
+      const account = document.getElementById('accountNumber').innerText.trim();
+      navigator.clipboard.writeText(account).then(() => {
+        const el = document.getElementById('copyStatus');
+        el.textContent = 'Đã sao chép số tài khoản: ' + account;
+        setTimeout(() => el.textContent = '', 2500);
+      });
+    }
+  </script>
+</body>
+</html>
